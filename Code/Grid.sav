@@ -1,0 +1,66 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Programmer:
+%Date:
+%Course:
+%Teacher:
+%Program Name:
+%Descriptions:  Grid functions/procedures
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+procedure drawGrid
+
+    var x : int := xStart
+    
+    loop:= 0
+	var clearLine : boolean := true
+	
+	for j : 1 .. rowSize
+	    
+	    %temporary
+	    if grid( i, j ) not = white
+	    then
+	    
+	    Draw.FillBox( x, y, x + SIZE, y + SIZE, green ) 
+	    
+	    end if
+	
+	    clearLine := clearLine and grid( i, j ) not = white
+	    
+	    Draw.Box (x, y, x + SIZE, y + SIZE, blue)
+
+	    y := y + SIZE
+
+	end for
+
+	if clearLine
+	then
+	
+	%put i, ", ",clearLine
+	    
+	    for j : 1..columnSize
+	    
+		for k : 1..rowSize
+		
+		    if k not = rowSize
+		    then
+		    
+		    grid( j, k ) := grid( j, k + 1 )
+		    
+		    else
+		    
+		    grid( j, k ) := white
+		    
+		    end if
+		
+		end for
+	    
+	    end for
+	
+	end if
+
+	x := x + SIZE
+
+    end for
+
+
+end drawGrid

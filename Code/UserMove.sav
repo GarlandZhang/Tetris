@@ -1,0 +1,114 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Programmer: Garland Zhang
+%Program Name: Tetris Marathon
+%Date: 5/25/2015
+%Course:  ICS3CU1  Final Project 15% <- encouragement
+%Teacher:  M. Ianni  Ms. Nobrega
+%Descriptions:  Final Program Name Here and a brief description of the game
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% command -> user interacts with the keyboard commands
+procedure command( var tetromino : array 1..arraySize, 1..arraySize of boolean, var xVal, yVal, timeElapsed, leftBound, rightBound,topBound, bottomBound, distanceAcross, randomNum, myColor : int, var pivotX, pivotY : real )
+
+loop
+
+    var key : array char of boolean
+	Input.KeyDown ( key )
+	
+if key ( KEY_LEFT_ARROW )% checks if user presses left arrow key.
+   and xVal + SIZE * ( leftBound - 2 ) >= xStart
+   and not impactIsMadeLeft( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    then
+
+    clearTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    moveLeft( xVal )
+    drawTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, myColor )
+
+    elsif key( KEY_RIGHT_ARROW )% checks if user presses right arrow key.
+	  and xVal + SIZE * ( distanceAcross + leftBound - 1 ) < xStart + SIZE * columnSize
+	  and not impactIsMadeRight( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound ) 
+	  %last check does not check for blocks one unit below. This causes blocks to crash with each other.
+	  %also, rotating the tetromino can push blocks.
+    then
+
+    clearTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    moveRight( xVal )
+    drawTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, myColor )
+    
+    elsif key( KEY_UP_ARROW )% checks if user presses up arrow key
+    then
+
+    var prevLeftBound : int := leftBound
+    var prevRightBound : int := rightBound
+    
+    clearTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    rotate( tetromino, pivotX, pivotY )
+    identifyBounds (tetromino, leftBound, rightBound, topBound, bottomBound, distanceAcross )
+       
+    if xVal + SIZE * ( leftBound - 2 ) < xStart 
+    then
+    
+    xVal := xVal + SIZE * ( prevLeftBound - leftBound )
+    
+    elsif xVal + SIZE * ( distanceAcross + leftBound - 1 ) >= xStart + SIZE * columnSize
+    then
+    
+    xVal := xVal - SIZE * ( rightBound - prevRightBound )
+    
+    end if
+    
+    drawTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, myColor )
+
+    elsif key( KEY_DOWN_ARROW ) % checks if user presses down arrow key.
+	  and yVal div SIZE - ( bottomBound - topBound + 1 ) not = 0
+	  and not impactIsMadeDown( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    then
+    
+    clearTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    yVal := yVal - SIZE
+    drawTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, myColor )
+
+    elsif key( ' ' )
+    then
+    
+    clearTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    drop( tetromino, xVal, leftBound, rightBound, bottomBound, topBound, yVal ) %Drops the bass
+    drawTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, myColor )
+
+end if
+
+delay( 125 )
+
+exit when Time.Elapsed >= timeElapsed + timeKeep
+
+end loop
+
+timeElapsed := timeElapsed + timeKeep
+
+end command
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% activeTetromino -> introduce new tetromino to the grid
+procedure activeTetromino( var tetromino : array 1..arraySize, 1..arraySize of boolean, var xVal, yVal, leftBound, rightBound, topBound, bottomBound, distanceAcross, randomNum, myColor : int, var pivotX, pivotY : real )
+
+    
+    %loop for tetromino
+    loop
+
+    identifyBounds( tetromino, leftBound, rightBound, topBound, bottomBound, distanceAcross )
+    drawTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, myColor )
+    command( tetromino, xVal, yVal, timeElapsed, leftBound, rightBound, topBound, bottomBound, distanceAcross, randomNum, myColor, pivotX, pivotY )
+    
+    exit when yVal div SIZE - ( bottomBound - topBound + 1 ) = 0
+	      or impactIsMadeDown( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+	      
+    
+    clearTetro( tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound )
+    yVal := yVal - SIZE
+    
+    end loop
+    
+    timeElapsed := timeElapsed + timeKeep
+
+end activeTetromino

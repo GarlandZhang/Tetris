@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Programmer:
+%Date:
+%Course:  ICS3CU1
+%Teacher:
+%Program Name: GameScreen.t
+%Descriptions:  Displays Game Screen 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% playButtonPressed -> action event to when play button is pressed. Respond by opening game screen
+procedure playButtonPressed
+
+isIntroWindowOpen := false
+isInstructionsWindowOpen := false
+isPlayWindowOpen := true
+
+end playButtonPressed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% displayGameScreen -> opens the game screen.
+procedure displayGameScreen
+
+    % Open the window
+    var winID : int
+    winID := Window.Open ("title:Game Window")
+    setscreen( "graphics:600;600" )
+
+	 % draws tetris background
+	 drawTetrisBG
+	 
+	 % Display grid
+	 drawGrid
+	 
+	 % Displays holding area
+	 drawHoldSquare
+	 
+	 % Display scoreboard
+	 displayScoreboard
+    
+	 %play music file
+	 fork playThemeMusic
+	 
+    %loop for duration of game
+    loop
+
+	var randomNum : int := Rand.Int (1, 7)  %random number to choose which tetromino to generate
+	var pivotX, pivotY : real %pivot points of tetromino; used to rotate
+	var myColor : int %color based on which tetromino is chosen
+	var xVal : int := xStart + SIZE * (columnSize div 2 - 1)  %current x-coor positioning of tetromino from the left
+	var yVal : int := yStart %current y-coor position of tetromino from the top
+	var tetromino : array 1 .. arraySize, 1 .. arraySize of boolean := createTetro (randomNum, pivotX, pivotY, myColor) %2D array to store tetromino ( 4x4 )
+	var leftBound, rightBound, topBound, bottomBound : int := 1 %boundaries for tetromino occupied in array
+	var heldOnce : boolean := false
+	holdStatus := false
+
+	activeTetromino (tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound, randomNum, myColor, pivotX, pivotY, heldOnce )
+	
+	exit when yVal = yStart and impactIsMadeDown (tetromino, xVal, yVal, leftBound, rightBound, topBound, bottomBound)
+    end loop
+    
+    Music.PlayFileStop
+    Window.Close( winID )
+
+end displayGameScreen

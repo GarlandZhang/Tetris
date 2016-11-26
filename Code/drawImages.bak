@@ -1,0 +1,109 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Programmer:
+%Date:
+%Course:
+%Teacher:
+%Program Name: drawImages.t
+%Descriptions:  Draws requried images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% drawLogo -> draws Tetris Logo
+procedure drawLogo
+
+var logo : int := Pic.FileNew ( "Images/TetrisLogo.gif" ) 
+
+logo := Pic.Scale ( logo, Pic.Width( logo ) div 1.5, Pic.Height( logo ) div 1.5 )
+Pic.Draw( logo, maxx div 2 - 215, 50, picMerge )
+Pic.Free( logo )
+
+end drawLogo
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% drawDemo -> draws Tetris Demo
+procedure drawDemo
+
+	var numFrames := Pic.Frames ("Images/tetrisDemo.gif")
+	
+	var delayTime : int
+	
+	var pics : array 1 .. numFrames of int
+
+	% Load the picture
+	Pic.FileNewFrames ("Images/tetrisDemo.gif", pics, delayTime)
+	for i : 1 .. numFrames
+  
+	delay( 100 )
+	Pic.Draw( Pic.Scale( pics( i ), maxx, maxy ), 0, 0, picMerge )
+	
+	Pic.Free (pics (i) )
+	    
+	end for
+
+end drawDemo
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% drawBattleKeys -> draws all keyboard controls that can be used in the game
+procedure drawBattleKeys
+
+var picId : int := Pic.FileNew( "Images/battleKeys.gif" )
+
+picId := Pic.Scale( picId, round( Pic.Width( picId ) * ( 4 / 3 ) ), round( Pic.Height( picId ) * ( 4 / 3 ) ) )
+
+Pic.Draw( picId, maxx div 2 - Pic.Width( picId ) div 2, maxy div 2 - Pic.Height( picId ) + 100, picMerge )
+
+Pic.Free( picId )
+
+end drawBattleKeys
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% drawTetrisBG -> draws Tetris background
+procedure drawTetrisBG
+
+var picId : int := Pic.FileNew( "Images/tetrisBG.gif" )
+
+picId := Pic.Scale( picId, maxx, maxy )
+
+Pic.Draw( picId, 0, 0, picMerge )
+
+Pic.Free( picId )
+
+end drawTetrisBG
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% drawGameOver -> draws game over text
+procedure drawGameOver
+
+var picId : int := Pic.FileNew( "Images/gameOver.gif" )
+
+picId := Pic.Scale( picId, maxx div 2, maxy div 2 )
+
+Pic.Draw( picId, maxx div 2 - 10, maxy div 2, picMerge )
+
+Pic.Free( picId )
+
+end drawGameOver
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% countdown -> countdowns time prior to starting game
+procedure countdown
+
+	var numFrames := Pic.Frames ("Images/countdown.gif")
+	
+	var delayTime : int
+	
+	var pics : array 1 .. numFrames of int
+
+	% Load the picture
+	Pic.FileNewFrames ("Images/countdown.gif", pics, delayTime)
+	for i : 1 .. numFrames
+      
+	delay( 500 )
+	
+	Pic.Draw( pics( i ), 0, 0, 0 )
+	
+	Pic.Free ( pics ( i ) )
+	    
+	end for
+
+end countdown

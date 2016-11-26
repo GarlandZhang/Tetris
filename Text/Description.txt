@@ -1,0 +1,11 @@
+Tetris Marathon is a one-player game. A 10 x 22 grid will appear on the screen. A 4-block variation, called a
+tetromino, is generated at the top of the grid and drops one grid square per second( initial speed ) towards the 
+bottom of the grid. The user will interact with the game by controlling the placement and position of the 
+tetromino through the interaction with the keyboard( e.g; arrow keys ). To gain points, the user must occupy 
+an entire row with blocks of any assortment of tetrominoes. This will clear the line, shift every block on top 
+downwards, and increment points value by one. Difficulty is based off of drop speed of the tetromino and changes 
+when a milestone points is reached( for every five lines cleared, increase speed by 75 milliseconds ).The game ends
+when the user stacks to the top of the screen. This game cannot be won, only prolonged. Input will be received by 
+the user’s interactions with the tetromino (arrow keys & other keys) and string manipulation of high scores. 
+A random generator will be used to identify which type of tetromino will be displayed next. High scores including
+username, will be inputted to a file for reference. High scores will also be displayed.

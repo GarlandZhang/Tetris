@@ -1,0 +1,11 @@
+1 GOOO       38
+2 Gee        0
+3 Game       0
+4 Over       0
+5 Ken        0
+6 Save       0
+7 Me         0
+8 123        0
+9 123        0
+10 bs         0
+
